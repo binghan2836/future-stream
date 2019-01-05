@@ -1,0 +1,16 @@
+{
+  "name": "fs_signaling",
+  "version": "1.0.0",
+  "description": "dispatch msg from client",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webrtc",
+    "nodejs"
+  ],
+  "author": "Dagai",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {}
+}
