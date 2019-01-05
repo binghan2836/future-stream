@@ -4,7 +4,7 @@
  * Created Date: Saturday January 5th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Saturday January 5th 2019 2:16:36 am
+ * Last Modified: Saturday January 5th 2019 1:49:44 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -65,10 +65,10 @@ Myclass.prototype.minus = function(){
     this.value --;
 };
 
-Myclass.add = function (){
+Myclass.prototype.add = function (){
     this.value ++;
 };
 
 var myclass = new Myclass(2);
 
-myclass.add();
+myclass.minus();
