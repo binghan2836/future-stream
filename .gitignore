@@ -14,4 +14,4 @@ CTestTestfile.cmake
 .eslintrc.json
 
 #for nodejs
-nodejs
+node_modules/
