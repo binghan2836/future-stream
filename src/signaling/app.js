@@ -4,7 +4,7 @@
  * Created Date: Saturday January 5th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Saturday January 5th 2019 1:49:44 pm
+ * Last Modified: Saturday January 5th 2019 4:26:15 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -38,37 +38,3 @@
 
 /* eslint-disable no-console */
 
-var a = 'a';
-
-/**
- * @description 
- * @param 
- * @param {*} arg 
- */
-function test(arg) {
-    console.log(arg);
-    return 'ddd';
-}
-console.log(a);
-
-console.log(test);
-
-/**
- * 
- * @param {*} val 
- */
-function Myclass(val) {
-    this.value = val;
-}
-
-Myclass.prototype.minus = function(){
-    this.value --;
-};
-
-Myclass.prototype.add = function (){
-    this.value ++;
-};
-
-var myclass = new Myclass(2);
-
-myclass.minus();

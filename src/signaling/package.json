@@ -12,7 +12,10 @@
   ],
   "author": "Dagai",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/binghan2836/future-stream.git"
