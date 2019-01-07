@@ -4,7 +4,7 @@
  * Created Date: Saturday January 5th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Saturday January 5th 2019 4:26:15 pm
+ * Last Modified: Monday January 7th 2019 1:24:27 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -38,3 +38,54 @@
 
 /* eslint-disable no-console */
 
+'use strict';
+
+//var os = require('os');
+let fs = require('fs');
+var path   = require('path');
+//var crypto = require('crypto');
+var https = require('https');
+var express = require('express');
+var app = express();
+var httpsServer;
+
+//config server
+//load configure file
+let serverConfig;
+try {
+    let content = fs.readFileSync('./signaling.config', 'utf-8');
+
+    serverConfig = JSON.parse(content);
+
+    //active server
+    if (serverConfig['server']['http'] == 'active') {
+        console.log('http server active');
+    }
+
+    if (serverConfig['server']['https'] == 'active') {
+        // Public Self-Signed Certificates for HTTPS connection
+        let Path = serverConfig['certifacation']['path'];
+        let keyPath = Path + serverConfig['certifacation']['key'];
+        let certPath = Path + serverConfig['certifacation']['cert'];
+        let privateKey = fs.readFileSync(keyPath, 'utf8');
+        let certificate = fs.readFileSync(certPath, 'utf8');
+
+        var credentials = { key: privateKey, cert: certificate };
+
+        httpsServer = https.createServer(credentials, app);
+
+    }
+
+    console.log(serverConfig);
+
+} catch (err) {
+
+    console.log(err);
+}
+
+httpsServer.listen(serverConfig['server']['tls_port'], serverConfig['server']['LANAccess']);
+
+//router
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname+'/index.html'));
+});
