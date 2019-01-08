@@ -4,7 +4,7 @@
  * Created Date: Saturday January 5th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Monday January 7th 2019 1:24:27 pm
+ * Last Modified: Tuesday January 8th 2019 3:33:37 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -41,13 +41,23 @@
 'use strict';
 
 //var os = require('os');
-let fs = require('fs');
-var path   = require('path');
+const fs = require('fs');
+const path = require('path');
+const socketIO = require('socket.io');
 //var crypto = require('crypto');
-var https = require('https');
-var express = require('express');
-var app = express();
-var httpsServer;
+const https = require('https');
+const express = require('express');
+const app = express();
+const url = require('url');
+//const ejs = require('ejs');
+var bodyParser = require('body-parser');
+
+// body parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+
+let server;
 
 //config server
 //load configure file
@@ -72,7 +82,7 @@ try {
 
         var credentials = { key: privateKey, cert: certificate };
 
-        httpsServer = https.createServer(credentials, app);
+        server = https.createServer(credentials, app);
 
     }
 
@@ -83,9 +93,69 @@ try {
     console.log(err);
 }
 
-httpsServer.listen(serverConfig['server']['tls_port'], serverConfig['server']['LANAccess']);
+server.listen(serverConfig['server']['tls_port'], serverConfig['server']['LANAccess']);
+
+//view engine setting
+app.set('views',path.join(__dirname + '/view'));
+app.set('view engine','ejs');
+
+// Expose the css and js resources as "public"
+app.use('/public', express.static('./source'));
 
 //router
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname+'/index.html'));
+    res.sendFile(path.join(__dirname + '/index.html'));
+});
+
+app.get('/chat', function (req, res) {
+    var data = url.parse(req.url, true).query;
+    res.render('chat',{gitroom:data['room']});
+});
+
+// eslint-disable-next-line no-unused-vars
+app.post('/room/post_room_name',function(req,res,next){
+    console.log(req.body);
+    res.redirect('/chat?room=' + req.body['room']);
+});
+
+//socket.io
+var io = socketIO.listen(server);
+io.sockets.on('connection', function (socket) {
+
+    // convenience function to log server messages on the client
+    function log() {
+        var array = ['Message from server:'];
+        array.push.apply(array, arguments);
+        socket.emit('log', array);
+    }
+
+    socket.on('message', function (message) {
+        log('Client said: ', message);
+        // for a real app, would be room-only (not broadcast)
+        socket.broadcast.emit('message', message);
+    });
+
+    socket.on('create or join', function (room) {
+        log('Received request to create or join room ' + room);
+
+        var clientsInRoom = io.sockets.adapter.rooms[room];
+        var numClients = clientsInRoom ? Object.keys(clientsInRoom.sockets).length : 0;
+        log('Room ' + room + ' now has ' + numClients + ' client(s)');
+
+        if (numClients === 0) {
+            socket.join(room);
+            log('Client ID ' + socket.id + ' created room ' + room);
+            socket.emit('created', room, socket.id);
+
+        } else if (numClients === 1) {
+            log('Client ID ' + socket.id + ' joined room ' + room);
+            io.sockets.in(room).emit('join', room);
+            socket.join(room);
+            socket.emit('joined', room, socket.id);
+            io.sockets.in(room).emit('ready');
+        } else { // max two clients
+            socket.emit('full', room);
+        }
+    });
+
 });
