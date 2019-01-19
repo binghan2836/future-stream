@@ -4,7 +4,7 @@
  * Created Date: Monday January 7th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Monday January 7th 2019 4:28:52 pm
+ * Last Modified: Saturday January 19th 2019 11:11:11 am
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -36,7 +36,10 @@
 // eslint-disable-next-line no-undef
 var socket = io.connect();
 
-socket.emit('create or join', '12345678');
+var room_name = document.querySelector('#room_name').innerHTML;
+
+
+socket.emit('create or join', room_name);
 
 socket.on('log', function (array) {
     // eslint-disable-next-line no-console

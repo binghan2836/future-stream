@@ -4,7 +4,7 @@
  * Created Date: Saturday January 5th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Tuesday January 8th 2019 3:33:37 pm
+ * Last Modified: Tuesday January 8th 2019 3:42:34 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -109,7 +109,7 @@ app.get('/', function (req, res) {
 
 app.get('/chat', function (req, res) {
     var data = url.parse(req.url, true).query;
-    res.render('chat',{gitroom:data['room']});
+    res.render('chat',{room:data['room']});
 });
 
 // eslint-disable-next-line no-unused-vars
