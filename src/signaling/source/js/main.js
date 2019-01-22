@@ -4,7 +4,7 @@
  * Created Date: Monday January 7th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Saturday January 19th 2019 11:11:11 am
+ * Last Modified: Tuesday January 22nd 2019 9:30:09 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -39,9 +39,15 @@ var socket = io.connect();
 var room_name = document.querySelector('#room_name').innerHTML;
 
 
-socket.emit('create or join', room_name);
+socket.emit('access', room_name);
 
 socket.on('log', function (array) {
     // eslint-disable-next-line no-console
     console.log.apply(console, array);
 });
+
+socket.on('joined', function (room, id) {
+    // eslint-disable-next-line no-console
+    console.log('join msg: ' + room + '  ' + id);
+});
+

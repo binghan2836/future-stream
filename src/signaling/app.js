@@ -4,7 +4,7 @@
  * Created Date: Saturday January 5th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Tuesday January 8th 2019 3:42:34 pm
+ * Last Modified: Tuesday January 22nd 2019 9:21:32 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -135,7 +135,7 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('message', message);
     });
 
-    socket.on('create or join', function (room) {
+    socket.on('access', function (room) {
         log('Received request to create or join room ' + room);
 
         var clientsInRoom = io.sockets.adapter.rooms[room];
@@ -151,8 +151,9 @@ io.sockets.on('connection', function (socket) {
             log('Client ID ' + socket.id + ' joined room ' + room);
             io.sockets.in(room).emit('join', room);
             socket.join(room);
-            socket.emit('joined', room, socket.id);
-            io.sockets.in(room).emit('ready');
+            //socket.emit('joined', room, socket.id);
+            //io.sockets.in(room).emit('ready');
+            io.sockets.in(room).emit('joined', room, socket.id);
         } else { // max two clients
             socket.emit('full', room);
         }
