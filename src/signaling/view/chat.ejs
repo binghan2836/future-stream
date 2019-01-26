@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html>
-    <meta charset="utf-8">
-    <title>Chat</title>
-    <body>
-        <div>Let's talk in <strong id ="room_name"><%= room %></strong></div>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="/public/js/main.js"></script>
-    </body>
+<meta charset="utf-8">
+
+<head>
+    <style type="text/css">
+        body {
+            text-align: center;
+            width: 1170px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<title>Chat</title>
+
+<body>
+    <div>Let's talk in <strong id="room_name">
+            <%= room %></strong></div>
+    <div id="chat">
+        <div id="messages" style="margin:0 auto;width:600px;border:1px solid #0F0"></div>
+        <input type="text" class="form-control" name="message" id="message" placeholder="Your messag here ...">
+        <button id="send-message" type="button">Send Message</button>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/public/js/main.js"></script>
+</body>
+
 </html>

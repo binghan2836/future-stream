@@ -4,7 +4,7 @@
  * Created Date: Saturday January 5th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Tuesday January 22nd 2019 9:21:32 pm
+ * Last Modified: Saturday January 26th 2019 2:10:45 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -145,18 +145,17 @@ io.sockets.on('connection', function (socket) {
         if (numClients === 0) {
             socket.join(room);
             log('Client ID ' + socket.id + ' created room ' + room);
-            socket.emit('created', room, socket.id);
-
+            socket.emit('identify', room, socket.id);
         } else if (numClients === 1) {
             log('Client ID ' + socket.id + ' joined room ' + room);
-            io.sockets.in(room).emit('join', room);
+            socket.emit('identify', room, socket.id);
             socket.join(room);
-            //socket.emit('joined', room, socket.id);
-            //io.sockets.in(room).emit('ready');
-            io.sockets.in(room).emit('joined', room, socket.id);
+            socket.broadcast.to(room).emit('joined', room, socket.id);
+            
+            //io.sockets.in(room).emit('joined', room, socket.id);
+
         } else { // max two clients
             socket.emit('full', room);
         }
     });
-
 });

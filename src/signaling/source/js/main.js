@@ -4,7 +4,7 @@
  * Created Date: Monday January 7th 2019
  * Author: DaGai  <binghan2836@163.com>
  * -----
- * Last Modified: Tuesday January 22nd 2019 9:30:09 pm
+ * Last Modified: Saturday January 26th 2019 2:33:10 pm
  * Modified By:   the developer formerly known as DaGai
  * -----
  * MIT License
@@ -38,6 +38,33 @@ var socket = io.connect();
 
 var room_name = document.querySelector('#room_name').innerHTML;
 
+document.getElementById('send-message').addEventListener('click', function(){
+    // Get the text to send
+    var text = document.getElementById('message').value;
+
+    var messageHTML = '<p align="right">'+ text +'</p>';
+
+    document.getElementById('messages').innerHTML += messageHTML;
+
+    document.getElementById('message').value = '';
+
+    socket.emit('message', text);
+    /*
+    // Prepare the data to send
+    var data = {
+        from: username,
+        text: text
+    };
+
+    // Send the message with Peer
+    conn.send(data);
+
+    // Handle the message on the UI
+    handleMessage(data);
+    */
+    
+}, false);
+
 
 socket.emit('access', room_name);
 
@@ -46,8 +73,19 @@ socket.on('log', function (array) {
     console.log.apply(console, array);
 });
 
+socket.on('identify', function (room, id) {
+    // eslint-disable-next-line no-console
+    console.log('identify:' + room + '  ' + id);
+});
+
 socket.on('joined', function (room, id) {
     // eslint-disable-next-line no-console
     console.log('join msg: ' + room + '  ' + id);
 });
 
+socket.on('message', function (message) {
+    // eslint-disable-next-line no-console
+    var messageHTML = '<p align="left">'+ message +'</p>';
+
+    document.getElementById('messages').innerHTML += messageHTML;
+});
